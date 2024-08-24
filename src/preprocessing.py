@@ -151,6 +151,64 @@ def offspring_identified_dealing(input_str):
         return 1
     else:
         return 0
+        
+def preprocess_data(df):
+    """
+    データフレームの全てのカラムに対して前処理を適用する関数
+    
+    Parameters:
+    df (pd.DataFrame): 前処理を行う対象のデータフレーム
+    
+    Returns:
+    pd.DataFrame: 前処理後のデータフレーム
+    """
+    
+    # Age カラムの前処理
+    if 'Age' in df.columns:
+        df['Age'] = df['Age'].apply(process_age)
+    
+    # DurationOfPitch カラムの前処理
+    if 'DurationOfPitch' in df.columns:
+        df['DurationOfPitch'] = df['DurationOfPitch'].apply(convert_to_minutes)
+    
+    # Gender カラムの前処理
+    if 'Gender' in df.columns:
+        df['Gender'] = df['Gender'].apply(Gender_dealing)
+    
+    # NumberOfFollowups カラムの前処理
+    if 'NumberOfFollowups' in df.columns:
+        df['NumberOfFollowups'] = df['NumberOfFollowups'].apply(NumberOfFollowups_dealing)
+    
+    # NumberOfTrips カラムの前処理
+    if 'NumberOfTrips' in df.columns:
+        df['NumberOfTrips'] = df['NumberOfTrips'].apply(NumberOfTrips_dealing)
+    
+    # Occupation カラムの前処理
+    if 'Occupation' in df.columns:
+        df['Occupation'] = df['Occupation'].apply(standardize_str)
+    
+    # ProductPitched カラムの前処理
+    if 'ProductPitched' in df.columns:
+        df['ProductPitched'] = df['ProductPitched'].apply(standardize_str)
+    
+    # Designation カラムの前処理
+    if 'Designation' in df.columns:
+        df['Designation'] = df['Designation'].apply(standardize_str)
+    
+    # MonthlyIncome カラムの前処理
+    if 'MonthlyIncome' in df.columns:
+        df['MonthlyIncome'] = df['MonthlyIncome'].apply(MonthlyIncome_dealing)
+    
+    # customer_info カラムの前処理
+    if 'customer_info' in df.columns:
+        customer_info_processed = df['customer_info'].apply(customer_info_dealing).str.split(',', expand=True)
+        df['married'] = customer_info_processed[0]
+        df['car_possession'] = customer_info_processed[1].apply(car_possesion_dealing)
+        df['offspring'] = customer_info_processed[2].apply(offspring_dealing)
+        df['offspring_identified'] = customer_info_processed[2].apply(offspring_identified_dealing)
+        df.drop('customer_info', axis=1, inplace=True)
+    
+    return df
 
 def preprocess_data_for_catboost(df):
     """CatBoost用のデータ前処理を行う"""
