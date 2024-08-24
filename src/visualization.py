@@ -82,3 +82,48 @@ def BoxChart(data):
     data.plot(kind='box')
     plt.title(f"Boxplot of {data.name}")
     plt.show()
+
+def BarChartDuble(x, y, rot=0):
+    # x軸とy軸の名前を取得
+    xlabel = x.name
+    ylabel = y.name
+    title = f'{xlabel} vs {ylabel}'
+
+    # x軸ごとの成約・非成約のカウント
+    crosstab_data = pd.crosstab(x, y)
+
+    # 積み上げ棒グラフの表示
+    ax = crosstab_data.plot(kind='bar', stacked=True, figsize=(5, 3))
+    plt.title(title)
+    plt.ylabel('Count')
+    plt.xlabel(xlabel)
+
+    # 各バーに成約率を表示
+    for i, container in enumerate(ax.containers):
+        for j, rect in enumerate(container):
+            height = rect.get_height()
+            if i == 1:  # 成約した場合のみ表示（i == 1は成約済みのデータ）
+                # Get the index of the corresponding row in the crosstab
+                index = crosstab_data.index[j]
+                total = crosstab_data.loc[index].sum()
+                percentage = height / total
+                x = rect.get_x() + rect.get_width() / 2
+                y = rect.get_y() + height + 5  # 文字が重ならないように少し上に表示
+                ax.annotate(f'{percentage:.2%}', (x, y), ha='center', fontsize=10, color='black')
+
+    plt.xticks(rotation=rot)  # x軸ラベルの回転角度を設定
+    plt.show()
+
+def BoxChartDuble(x, y, figsize=(5, 3)):
+    # x軸とy軸の名前を取得
+    xlabel = x.name
+    ylabel = y.name
+    title = f'{ylabel} vs {xlabel}'
+
+    # 箱ひげ図の描画
+    plt.figure(figsize=figsize)
+    sns.boxplot(x=x, y=y)
+    plt.title(title)
+    plt.ylabel(ylabel)
+    plt.xlabel(xlabel)
+    plt.show()
