@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 def HistChart(data, rot=0):
     """
