@@ -152,7 +152,7 @@ def offspring_identified_dealing(input_str):
     else:
         return 0
         
-def preprocess_data(df):
+def preprocess4analysis(df):
     """
     データフレームの全てのカラムに対して前処理を適用する関数
     
@@ -210,7 +210,7 @@ def preprocess_data(df):
     
     return df
 
-def preprocess_data_for_catboost(df):
+def preprocess4catboost(df):
     """CatBoost用のデータ前処理を行う"""
     df['Age'] = df['Age'].apply(process_age)
     df['DurationOfPitch'] = df['DurationOfPitch'].apply(convert_to_minutes)
@@ -239,7 +239,7 @@ def preprocess_data_for_catboost(df):
     return df, categorical_columns
 
 #分析用の前処理関数
-def preprocess_data4cluster(df):
+def preprocess4cluster(df):
     df['Age'] = df['Age'].apply(process_age)
     # df['TypeofContact'] = df['TypeofContact'].apply(TypeofContact_to_dummy)
     # CityTier
