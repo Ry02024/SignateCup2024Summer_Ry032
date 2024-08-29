@@ -279,3 +279,44 @@ def preprocess_data4cluster(df):
     ], drop_first=True)
 
     return df
+
+# LightGBM用
+from sklearn.preprocessing import LabelEncoder
+import pickle
+
+def preprocess4lgb(df):
+    # 各カラムに対する処理を適用
+    df['Age'] = df['Age'].apply(process_age)
+    df['DurationOfPitch'] = df['DurationOfPitch'].apply(convert_to_minutes)
+    df['Occupation'] = df['Occupation'].apply(standardize_str)
+    df['Gender'] = df['Gender'].apply(Gender_dealing)
+    df['NumberOfFollowups'] = df['NumberOfFollowups'].apply(NumberOfFollowups_dealing)
+    df['ProductPitched'] = df['ProductPitched'].apply(standardize_str)
+    df['NumberOfTrips'] = df['NumberOfTrips'].apply(NumberOfTrips_dealing)
+    df['Designation'] = df['Designation'].apply(standardize_str)
+    df['MonthlyIncome'] = df['MonthlyIncome'].apply(MonthlyIncome_dealing)
+
+    # 顧客情報の処理
+    customer_info_processed = df['customer_info'].apply(customer_info_dealing).str.split(',', expand=True)
+    df['married'] = customer_info_processed[0]
+    df['car_possession'] = customer_info_processed[1].apply(car_possesion_dealing)
+    df['offspring'] = customer_info_processed[2].apply(offspring_dealing)
+    df['offspring_identified'] = customer_info_processed[2].apply(offspring_identified_dealing)
+    df.drop('customer_info', axis=1, inplace=True)
+
+    # Label Encodingを適用し、その対応を保存
+    label_encoders = {}
+    encoding_mappings = {}
+    categorical_columns = ['CityTier', 'PreferredPropertyStar', 'PitchSatisfactionScore',
+                           'TypeofContact', 'Occupation', 'Gender',
+                           'ProductPitched', 'Designation', 'married', 'car_possession']
+
+    for column in categorical_columns:
+        le = LabelEncoder()
+        df[column] = le.fit_transform(df[column])
+        label_encoders[column] = le
+
+        # エンコーディングの対応を保存
+        encoding_mappings[column] = dict(zip(le.classes_, le.transform(le.classes_)))
+
+    return df, categorical_columns, encoding_mappings
