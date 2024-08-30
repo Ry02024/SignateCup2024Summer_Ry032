@@ -39,23 +39,12 @@ jobs:
         mkdir -p notebooks  # 出力先ディレクトリの確認・作成
         jupyter nbconvert --to notebook --execute notebooks/01_Preprocessing.ipynb --output 01_Preprocessing.ipynb
 
-    - name: Commit and push notebook changes
-      run: |
-        git config --local user.email "tan0ry020204@gmail.com"
-        git config --local user.name "Ry02024"
-        git add 01_Preprocessing.ipynb
-        git commit -m "Update processed notebook"
-        git push origin main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "tan0ry020204@gmail.com"
-        git config --local user.name "Ry02024"
-        git add data/processed/analysis/train4analysis.csv
-        git add data/processed/analysis/test4analysis.csv
-        git commit -m "Update processed data"
-        git push origin main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+- name: Commit and push notebook changes
+  run: |
+    git config --local user.email "tan0ry020204@gmail.com"
+    git config --local user.name "Ry02024"
+    git add .  # すべての変更をステージ
+    git commit -m "Update processed notebook and new files"
+    git push origin main
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
