@@ -21,7 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders
+        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders seaborn
 
     - name: Run the notebook
       run: |
