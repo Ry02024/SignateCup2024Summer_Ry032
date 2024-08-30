@@ -35,7 +35,7 @@ jobs:
 
     - name: Run the notebook
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/sample.ipynb --output notebooks/sample.ipynb
+        jupyter nbconvert --to notebook --execute notebooks/sample.ipynb --output sample.ipynb
 
     - name: Commit and push changes
       run: |
