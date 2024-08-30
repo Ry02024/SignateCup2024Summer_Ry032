@@ -23,11 +23,15 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Check current directory
+      run: pwd
+    - name: List files
+      run: ls -la
+
     - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders seaborn
-
 
     - name: Run the notebook
       run: |
