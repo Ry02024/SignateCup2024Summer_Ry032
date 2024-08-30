@@ -1,0 +1,49 @@
+name: Run Jupyter Notebook
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clear pip cache
+      run: |
+        pip cache purge
+        
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Check current directory
+      run: pwd
+    - name: List files
+      run: ls -la
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install notebook pandas numpy
+
+    - name: Run the notebook
+      run: |
+        jupyter nbconvert --to notebook --execute notebooks/sample.ipynb --output notebooks/sample.ipynb
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "tan0ry020204@gmail.com"
+        git config --local user.name "Ry02024"
+        git add notebooks/sample.ipynb  # Notebookの変更をステージ
+        git add data/processed/analysis/train2.csv  # 出力されたデータもステージ
+        git commit -m "Automatically processed and saved train2.csv"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
