@@ -1,0 +1,38 @@
+name: Run Jupyter Notebook
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clear pip cache
+      run: |
+        pip cache purge
+        
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders seaborn
+
+    - name: Run the notebook
+      run: |
+        mkdir -p data/processed/analysis  # Ensure the directory exists
+        jupyter nbconvert --to notebook --execute notebooks/01_Preprocessing.ipynb --output notebooks/01_Preprocessing.ipynb
+
+    - name: Check generated files
+      run: |
+        ls -la data/processed/analysis/  # Check if train2.csv is present
