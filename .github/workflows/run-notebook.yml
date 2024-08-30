@@ -35,6 +35,7 @@ jobs:
 
     - name: Run the notebook
       run: |
+        mkdir -p notebooks  # 出力先ディレクトリの確認・作成
         jupyter nbconvert --to notebook --execute notebooks/01_Preprocessing.ipynb --output notebooks/01_Preprocessing.ipynb
 
     - name: Commit and push changes
