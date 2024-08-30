@@ -1,0 +1,39 @@
+name: Run Jupyter Notebook
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders
+
+    - name: Run the notebook
+      run: |
+        jupyter nbconvert --to notebook --execute notebooks/01_Preprocessing.ipynb --output notebooks/01_Preprocessing.ipynb
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "your-email@example.com"
+        git config --local user.name "Your Name"
+        git add data/processed/analysis/train4analysis.csv
+        git add data/processed/analysis/test4analysis.csv
+        git commit -m "Update processed data"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
