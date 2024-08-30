@@ -23,25 +23,25 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: Check current directory
-      run: pwd
-    - name: List files
-      run: ls -la
-
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install notebook pandas numpy
+        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders seaborn
 
     - name: Run the notebook
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/sample.ipynb --output sample.ipynb
+        mkdir -p data/processed/analysis  # Ensure the directory exists
+        jupyter nbconvert --to notebook --execute notebooks/01_Preprocessing.ipynb --output notebooks/01_Preprocessing.ipynb
+
+    - name: Check generated files
+      run: |
+        ls -la data/processed/analysis/  # Check if train2.csv is present
 
     - name: Commit and push changes
       run: |
         git config --local user.email "tan0ry020204@gmail.com"
         git config --local user.name "Ry02024"
-        git add notebooks/sample.ipynb  # Notebookの変更をステージ
+        git add notebooks/01_Preprocessing.ipynb  # Notebookの変更をステージ
         git add data/processed/analysis/train2.csv  # 出力されたデータもステージ
         git commit -m "Automatically processed and saved train2.csv"
         git push origin main
