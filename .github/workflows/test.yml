@@ -24,7 +24,8 @@ jobs:
         pip install pandas
 
     - name: Run Python script
-      run: python test.py
+      run: python src/preprocessing/test.py
+
 
     - name: Commit and push CSV to repository
       run: |
