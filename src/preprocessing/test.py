@@ -1,7 +1,4 @@
 import pandas as pd
-# GitHubリポジトリのクローン
-!git clone https://github.com/Ry02024/SignateCup2024Summer_Ry032.git
-%cd SignateCup2024Summer_Ry032/
 
 # CSVファイルの読み込み
 input_path = 'data/raw/train.csv'
