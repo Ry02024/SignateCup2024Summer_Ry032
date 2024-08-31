@@ -1,0 +1,28 @@
+name: Run Jupyter Notebook
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install notebook pandas numpy lightgbm catboost japanize-matplotlib category_encoders seaborn papermill
+
+    - name: Run the notebook with papermill
+      run: |
+        papermill notebooks/01_Preprocessing.ipynb notebooks/01_Preprocessing_output.ipynb
