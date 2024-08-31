@@ -26,3 +26,14 @@ jobs:
     - name: Run the notebook with papermill
       run: |
         papermill notebooks/01_Preprocessing.ipynb notebooks/01_Preprocessing_output.ipynb
+
+
+    - name: Run the notebook with papermill
+      run: |
+        papermill notebooks/01_Preprocessing.ipynb notebooks/01_Preprocessing_output.ipynb
+
+    - name: Upload executed notebook
+      uses: actions/upload-artifact@v2
+      with:
+        name: executed-notebook
+        path: notebooks/01_Preprocessing_output.ipynb
