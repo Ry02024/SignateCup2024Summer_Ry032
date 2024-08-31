@@ -33,6 +33,6 @@ jobs:
         git config --local user.name "Ry02024"
         git add data/processed/analysis/train2.csv  # 出力されたデータをステージ
         git commit -m "Automatically processed and saved train2.csv"
-        git push origin main
+        git push origin master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
